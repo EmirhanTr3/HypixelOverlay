@@ -1,0 +1,28 @@
+{
+  "schemaVersion": 1,
+  "id": "hypixeloverlay",
+  "version": "${version}",
+  "name": "HypixelOverlay",
+  "description": "",
+  "authors": [],
+  "contact": {},
+  "license": "All-Rights-Reserved",
+  "icon": "assets/hypixeloverlay/icon.png",
+  "environment": "client",
+  "entrypoints": {
+    "fabric-datagen": [
+      "xyz.emirdev.hypixeloverlay.HypixelOverlayDataGenerator"
+    ],
+    "client": [
+      "xyz.emirdev.hypixeloverlay.HypixelOverlayClient"
+    ]
+  },
+  "mixins": [
+    "hypixeloverlay.mixins.json"
+  ],
+  "depends": {
+    "fabricloader": ">=${loader_version}",
+    "fabric": "*",
+    "minecraft": "${minecraft_version}"
+  }
+}
