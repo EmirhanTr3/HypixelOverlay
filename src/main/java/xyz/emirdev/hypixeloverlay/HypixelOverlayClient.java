@@ -1,15 +1,16 @@
 package xyz.emirdev.hypixeloverlay;
 
+import me.shedaniel.autoconfig.AutoConfig;
 import net.fabricmc.api.ClientModInitializer;
 import net.fabricmc.fabric.api.client.event.lifecycle.v1.ClientTickEvents;
 import net.fabricmc.fabric.api.client.keybinding.v1.KeyBindingHelper;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.HudElementRegistry;
 import net.fabricmc.fabric.api.client.rendering.v1.hud.VanillaHudElements;
+import net.fabricmc.loader.api.FabricLoader;
 import net.minecraft.client.MinecraftClient;
-import net.minecraft.client.network.ServerInfo;
 import net.minecraft.client.option.KeyBinding;
 import net.minecraft.client.util.InputUtil;
-import net.minecraft.text.Text;
+import net.minecraft.util.ActionResult;
 import net.minecraft.util.Identifier;
 import org.lwjgl.glfw.GLFW;
 
@@ -21,15 +22,31 @@ public class HypixelOverlayClient implements ClientModInitializer {
     public KeyBinding keybind;
     public KeyBinding configKeybind;
 
-    public String hypixelAPIKey;
+    public APIKeyStatus apiKeyStatus = APIKeyStatus.UNKNOWN;
 
     public static HypixelOverlayClient getInstance() {
         return instance;
     }
 
+    public static boolean isHypixel() {
+        if (Objects.equals(MinecraftClient.getInstance().getNetworkHandler().getServerInfo().address, "hypixel.net")
+                || FabricLoader.getInstance().isDevelopmentEnvironment()
+        ) return true;
+
+        return false;
+    }
+
     @Override
     public void onInitializeClient() {
         instance = this;
+        ModConfig.init();
+        new Thread(() -> apiKeyStatus = HypixelAPI.validateAPIKey(ModConfig.INSTANCE.hypixelAPIKey)).start();
+
+        AutoConfig.getConfigHolder(ModConfig.class).registerSaveListener((holder, config) -> {
+            new Thread(() -> apiKeyStatus = HypixelAPI.validateAPIKey(config.hypixelAPIKey)).start();
+            return ActionResult.SUCCESS;
+        });
+
         keybind = KeyBindingHelper.registerKeyBinding(new KeyBinding(
                 "key.hypixeloverlay.stats",
                 InputUtil.Type.KEYSYM,
@@ -48,7 +65,7 @@ public class HypixelOverlayClient implements ClientModInitializer {
 
         ClientTickEvents.END_CLIENT_TICK.register(client -> {
             if (keybind.wasPressed()) {
-                if (!Objects.equals(MinecraftClient.getInstance().getNetworkHandler().getServerInfo().address, "hypixel.net")) {
+                if (!isHypixel()) {
                     return;
                 }
 
@@ -67,7 +84,7 @@ public class HypixelOverlayClient implements ClientModInitializer {
 
             if (configKeybind.wasPressed()) {
                 if (MinecraftClient.getInstance().currentScreen != null) return;
-                MinecraftClient.getInstance().setScreen(new ConfigScreen());
+                MinecraftClient.getInstance().setScreen(AutoConfig.getConfigScreen(ModConfig.class, null).get());
             }
         });
 

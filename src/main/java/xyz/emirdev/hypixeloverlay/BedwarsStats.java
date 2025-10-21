@@ -39,7 +39,7 @@ public class BedwarsStats {
         new Thread(() -> {
             System.out.println("Fetching stats for " + playerUuids.size() + " players...");
             player.sendMessage(Text.literal("Fetching stats for " + playerUuids.size() + " players...").withColor(0xFF88FFAA), true);
-            List<String> playerStatsJson = HypixelAPI.getMultiplePlayerStats(playerUuids, HypixelOverlayClient.getInstance().hypixelAPIKey);
+            List<String> playerStatsJson = HypixelAPI.getMultiplePlayerStats(playerUuids, ModConfig.INSTANCE.hypixelAPIKey);
 
             if (playerStatsJson == null) return;
 

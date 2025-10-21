@@ -20,7 +20,7 @@ public class StatsHud {
             int screenWidth = client.getWindow().getScaledWidth();
             int screenHeight = client.getWindow().getScaledHeight();
 
-            if (!Objects.equals(MinecraftClient.getInstance().getNetworkHandler().getServerInfo().address, "hypixel.net")) {
+            if (!HypixelOverlayClient.isHypixel()) {
                 String message = "Server is not hypixel.net";
                 int textWidth = client.textRenderer.getWidth(message);
                 int x = screenWidth - textWidth - 4;
@@ -40,6 +40,17 @@ public class StatsHud {
                 int y = screenHeight - 25;
                 drawContext.fill(x - 2, y - 2, x + textWidth + 2, y + 10, 0x80000000);
                 drawContext.drawText(client.textRenderer, message, x, y, 0xFFFFFFFF, true);
+
+                String keyStatusMessage1 = "API Key Status: ";
+                String keyStatusMessage2 = HypixelOverlayClient.getInstance().apiKeyStatus.getName();
+                int keyStatusTextWidth1 = client.textRenderer.getWidth(keyStatusMessage1);
+                int keyStatusTextWidth2 = client.textRenderer.getWidth(keyStatusMessage2);
+                int keyStatusX2 = screenWidth - keyStatusTextWidth2 - 4;
+                int keyStatusX1 = keyStatusX2 - keyStatusTextWidth1;
+                int keyStatusY = screenHeight - 38;
+                drawContext.fill(keyStatusX1 - 2, keyStatusY - 2, keyStatusX1 + keyStatusTextWidth1 + keyStatusTextWidth2 + 2, keyStatusY + 10, 0x80000000);
+                drawContext.drawText(client.textRenderer, keyStatusMessage1, keyStatusX1, keyStatusY, 0xFFFFFFFF, true);
+                drawContext.drawText(client.textRenderer, keyStatusMessage2, keyStatusX2, keyStatusY, HypixelOverlayClient.getInstance().apiKeyStatus.getColor(), true);
                 return;
             }
 
@@ -57,6 +68,16 @@ public class StatsHud {
 
             drawContext.fill(screenWidth - textWidth - 10, y - 17, screenWidth - 2, y - 2, 0x80000000);
             drawContext.drawText(client.textRenderer, message, screenWidth - textWidth - 6, y - 13, 0xFFFFFFFF, true);
+
+            String keyStatusMessage1 = "API Key Status: ";
+            String keyStatusMessage2 = HypixelOverlayClient.getInstance().apiKeyStatus.getName();
+            int keyStatusTextWidth1 = client.textRenderer.getWidth(keyStatusMessage1);
+            int keyStatusTextWidth2 = client.textRenderer.getWidth(keyStatusMessage2);
+            int keyStatusX2 = screenWidth - keyStatusTextWidth2 - textWidth - 10 - 4;
+            int keyStatusX1 = keyStatusX2 - keyStatusTextWidth1;
+            drawContext.fill(keyStatusX1 - 2, y - 17, keyStatusX1 + keyStatusTextWidth1 + keyStatusTextWidth2 + 2, y - 2, 0x80000000);
+            drawContext.drawText(client.textRenderer, keyStatusMessage1, keyStatusX1, y - 13, 0xFFFFFFFF, true);
+            drawContext.drawText(client.textRenderer, keyStatusMessage2, keyStatusX2, y - 13, HypixelOverlayClient.getInstance().apiKeyStatus.getColor(), true);
 
             renderTable(client, drawContext, playerStats, x, y, tableWidth, tableHeight);
         }
@@ -89,7 +110,7 @@ public class StatsHud {
 
             for (int i = 0; i < rowData.length; i++) {
                 int color = 0xFFFFFFFF;
-                if (i == 0 && stats.level > 120) color = 0xFFFF5555;
+                if (i == 0 && stats.level > ModConfig.INSTANCE.warnLevel) color = 0xFFFF5555;
                 drawContext.drawText(client.textRenderer, rowData[i], currentX, currentY, color, true);
                 currentX += columnWidths[i];
             }

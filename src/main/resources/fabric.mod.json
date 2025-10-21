@@ -3,11 +3,23 @@
   "id": "hypixeloverlay",
   "version": "${version}",
   "name": "HypixelOverlay",
-  "description": "",
-  "authors": [],
-  "contact": {},
-  "license": "All-Rights-Reserved",
+  "description": "Shows information about players in your hypixel game.",
+  "authors": ["EmirhanTr3"],
+  "contact": {
+    "sources": "https://github.com/EmirhanTr3/HypixelOverlay",
+    "homepage": "https://modrinth.com/mod/hypixeloverlay",
+    "issues": "https://github.com/EmirhanTr3/HypixelOverlay/issues"
+  },
+  "license": "GPL-3.0-only",
   "icon": "assets/hypixeloverlay/icon.png",
+  "custom": {
+    "modmenu": {
+      "links": {
+        "modmenu.modrinth": "https://modrinth.com/mod/hypixeloverlay",
+        "modmenu.curseforge": "https://www.curseforge.com/minecraft/mc-mods/hypixeloverlay"
+      }
+    }
+  },
   "environment": "client",
   "entrypoints": {
     "fabric-datagen": [
@@ -15,6 +27,9 @@
     ],
     "client": [
       "xyz.emirdev.hypixeloverlay.HypixelOverlayClient"
+    ],
+    "modmenu": [
+      "xyz.emirdev.hypixeloverlay.ModMenuIntegration"
     ]
   },
   "mixins": [

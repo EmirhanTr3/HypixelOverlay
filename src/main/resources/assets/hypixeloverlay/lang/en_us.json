@@ -1,4 +1,10 @@
 {
   "key.hypixeloverlay.stats": "Refresh Stats",
-  "key.hypixeloverlay.config": "Open Config"
+  "key.hypixeloverlay.config": "Open Config",
+
+  "text.autoconfig.hypixeloverlay.title": "HypixelOverlay Config",
+  "text.autoconfig.hypixeloverlay.option.hypixelAPIKey": "Hypixel API Key",
+  "text.autoconfig.hypixeloverlay.option.hypixelAPIKey.@Tooltip": "Hypixel API Key obtained from https://developer.hypixel.net/dashboard",
+  "text.autoconfig.hypixeloverlay.option.warnLevel": "Warn Level",
+  "text.autoconfig.hypixeloverlay.option.warnLevel.@Tooltip": "Shows the player's name red in the overlay if their level is above this value."
 }
